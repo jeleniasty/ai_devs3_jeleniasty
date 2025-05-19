@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Build output
+dist/
+build/
+
+# IDE
+.idea/
+.vscode/
+
+# Environment variables
+.env
+.env.local
+.env.*
+.env.development
+.env.test
+.env.production
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project specific
+src/S02E01/temp/
+src/S02E01/extracted/
+src/config.ts 
