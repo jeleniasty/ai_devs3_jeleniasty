@@ -112,4 +112,49 @@ export class OpenAIService {
             throw new Error('Unknown error occurred during transcription');
         }
     }
+
+    async analyzeImage(
+        input: Buffer | string,
+        options: {
+            model?: OpenAIModel;
+            maxTokens?: number;
+            temperature?: number;
+            prompt?: string;
+        } = {}
+    ): Promise<string> {
+        try {
+            let imageBuffer: Buffer;
+            if (typeof input === 'string') {
+                imageBuffer = fs.readFileSync(input);
+            } else {
+                imageBuffer = input;
+            }
+            const base64Image = imageBuffer.toString('base64');
+
+            const response = await this.openai.chat.completions.create({
+                model: options.model || OpenAIModel.GPT4O,
+                messages: [
+                    {
+                        role: 'user',
+                        content: [
+                            { type: 'text', text: options.prompt || 'What\'s in this image?' },
+                            { type: 'image_url', image_url: { url: `data:image/jpeg;base64,${base64Image}` } }
+                        ]
+                    }
+                ],
+                max_tokens: options.maxTokens,
+                temperature: options.temperature
+            });
+
+            return response.choices[0].message.content || '';
+        } catch (error) {
+            if (error instanceof OpenAI.APIError) {
+                throw new Error(`OpenAI API Error: ${error.message}`);
+            }
+            if (error instanceof Error) {
+                throw new Error(`Error: ${error.message}`);
+            }
+            throw new Error('Unknown error occurred during image analysis');
+        }
+    }
 } 
