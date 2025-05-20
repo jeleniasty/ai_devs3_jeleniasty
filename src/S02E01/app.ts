@@ -12,6 +12,7 @@ const REPORT_URL = CONFIG.REPORT_URL;
 const transcribeSystemPrompt = `You are a police officer transcribing an interrogation. 
 Focus on accurately transcribing the conversation, including any names, dates, and locations mentioned.
 Pay special attention to any incriminating statements or confessions.`;
+
 const textSystemPrompt = `Based on transcriptions from witnesses interrogation you should determine on which street a specific university institute is located, where Professor Andrzej Maj teaches.
 
 Follow these steps in your analysis:
