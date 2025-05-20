@@ -36,7 +36,7 @@ function calculateExpression(expression: string): number {
 }
 
 async function main() {
-    const openai = new OpenAIService({model: OpenAIModel.GPT4O});
+    const openai = new OpenAIService();
     const response = await axios.get(DATA_URL);
     const jsonData = response.data;
     console.log(jsonData);

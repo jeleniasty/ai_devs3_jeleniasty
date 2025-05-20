@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { OpenAIService } from '../services/OpenAI/OpenAIService';
-import { OpenAIModel } from '../services/OpenAI/OpenAIModel';
 import { CONFIG } from '../config';
 
 const URL = CONFIG.BASE_URL;
@@ -60,7 +59,7 @@ async function login(answer: number) {
 }
 
 async function getNumericAnswer(question: string): Promise<number> {
-    const openai = new OpenAIService({ model: OpenAIModel.GPT4O });
+    const openai = new OpenAIService();
 
     const systemPrompt = `You are a helpful human-like assistant that answers questions with numbers only. 
 Answer in a very short and concise manner. If the answer is not a number, return 0.

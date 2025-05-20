@@ -53,7 +53,7 @@ async function callVerify(msgId: number, text: string): Promise<Message> {
 }
 
 async function getAnswer(question: string, conversationHistory: ConversationHistory[]): Promise<string> {
-    const openai = new OpenAIService({ model: OpenAIModel.GPT4O });
+    const openai = new OpenAIService();
     
     const messages = [
         { role: OpenAIRoles.SYSTEM, content: systemPrompt }

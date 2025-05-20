@@ -1,14 +1,13 @@
 import dotenv from 'dotenv';
-import OpenAI from 'openai';
+import OpenAI, { toFile } from 'openai';
 import { OpenAIModel } from './OpenAIModel';
+import fs from 'fs';
+import path from 'path';
 
 dotenv.config();
 
 export interface OpenAIConfig {
     apiKey?: string;
-    model?: string;
-    temperature?: number;
-    maxTokens?: number;
 }
 
 export interface ChatMessage {
@@ -18,7 +17,6 @@ export interface ChatMessage {
 
 export class OpenAIService {
     private readonly openai: OpenAI;
-    private readonly defaultModel: string;
 
     constructor(config: OpenAIConfig = {}) {
         const apiKey = config.apiKey || process.env.OPENAI_API_KEY;
@@ -28,7 +26,6 @@ export class OpenAIService {
         }
 
         this.openai = new OpenAI({ apiKey });
-        this.defaultModel = config.model || OpenAIModel.GPT4O;
     }
 
     async getCompletion<T>(
@@ -43,7 +40,7 @@ export class OpenAIService {
         try {
             const completionOptions: any = {
                 messages,
-                model: options.model || this.defaultModel,
+                model: options.model || OpenAIModel.GPT4O,
             };
 
             if ('temperature' in options) {
@@ -56,7 +53,7 @@ export class OpenAIService {
             const completion = await this.openai.chat.completions.create(completionOptions);
 
             const response = completion.choices[0]?.message?.content;
-            
+
             if (!response) {
                 throw new Error('No response received from OpenAI');
             }
@@ -74,6 +71,45 @@ export class OpenAIService {
                 throw new Error(`Error: ${error.message}`);
             }
             throw new Error('Unknown error occurred');
+        }
+    }
+
+    async transcribeAudio(
+        input: Buffer | string,
+        options: {
+            model?: OpenAIModel;
+            language?: string;
+            responseFormat?: 'json' | 'text' | 'srt' | 'verbose_json' | 'vtt';
+            temperature?: number;
+            prompt?: string;
+        } = {}
+    ): Promise<string> {
+        try {
+            let file;
+            if (typeof input === 'string') {
+                file = await toFile(fs.readFileSync(input), path.basename(input));
+            } else {
+                file = await toFile(input, 'speech.mp3');
+            }
+            
+            const transcription = await this.openai.audio.transcriptions.create({
+                file,
+                model: options.model || OpenAIModel.WHISPER_1,
+                language: options.language || 'en',
+                response_format: options.responseFormat,
+                temperature: options.temperature,
+                prompt: options.prompt
+            });
+
+            return transcription.text;
+        } catch (error) {
+            if (error instanceof OpenAI.APIError) {
+                throw new Error(`OpenAI API Error: ${error.message}`);
+            }
+            if (error instanceof Error) {
+                throw new Error(`Error: ${error.message}`);
+            }
+            throw new Error('Unknown error occurred during transcription');
         }
     }
 } 

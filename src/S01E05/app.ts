@@ -25,9 +25,7 @@ Input: Podejrzany Krawczyk Karol zamieszkały w ulicy Głównej 123 w mieście K
 Output: Podejrzany CENZURA zamieszkały w ulicy CENZURA w mieście CENZURA. Ma CENZURA lat.
 `;
 
-const openai = new OpenAIService({
-    model: OpenAIModel.GPT4O_MINI
-});
+const openai = new OpenAIService();
 
 async function main() {
     const originalText = await axios.get(DATA_URL);
