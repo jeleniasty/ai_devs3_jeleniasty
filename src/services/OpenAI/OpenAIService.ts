@@ -64,13 +64,7 @@ export class OpenAIService {
 
             return response as unknown as T;
         } catch (error) {
-            if (error instanceof OpenAI.APIError) {
-                throw new Error(`OpenAI API Error: ${error.message}`);
-            }
-            if (error instanceof Error) {
-                throw new Error(`Error: ${error.message}`);
-            }
-            throw new Error('Unknown error occurred');
+            this.handleOpenAIError(error, 'completion');
         }
     }
 
@@ -103,13 +97,7 @@ export class OpenAIService {
 
             return transcription.text;
         } catch (error) {
-            if (error instanceof OpenAI.APIError) {
-                throw new Error(`OpenAI API Error: ${error.message}`);
-            }
-            if (error instanceof Error) {
-                throw new Error(`Error: ${error.message}`);
-            }
-            throw new Error('Unknown error occurred during transcription');
+            this.handleOpenAIError(error, 'transcription');
         }
     }
 
@@ -144,13 +132,17 @@ export class OpenAIService {
 
             return response.choices[0].message.content || '';
         } catch (error) {
-            if (error instanceof OpenAI.APIError) {
-                throw new Error(`OpenAI API Error: ${error.message}`);
-            }
-            if (error instanceof Error) {
-                throw new Error(`Error: ${error.message}`);
-            }
-            throw new Error('Unknown error occurred during image analysis');
+            this.handleOpenAIError(error, 'image analysis');
         }
+    }
+
+    private handleOpenAIError(error: unknown, context: string): never {
+        if (error instanceof OpenAI.APIError) {
+            throw new Error(`OpenAI API Error: ${error.message}`);
+        }
+        if (error instanceof Error) {
+            throw new Error(`Error: ${error.message}`);
+        }
+        throw new Error(`Unknown error occurred during ${context}`);
     }
 } 
