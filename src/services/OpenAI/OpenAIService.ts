@@ -123,7 +123,7 @@ export class OpenAIService {
         } = {}
     ): Promise<string> {
         try {
-            const imageUrl = typeof input === 'string' 
+            const imageInput = typeof input === 'string' 
                 ? input
                 : `data:image/jpeg;base64,${input.toString('base64')}`;
 
@@ -134,7 +134,7 @@ export class OpenAIService {
                         role: 'user',
                         content: [
                             { type: 'text', text: options.prompt || 'What\'s in this image?' },
-                            { type: 'image_url', image_url: { url: imageUrl } }
+                            { type: 'image_url', image_url: { url: imageInput } }
                         ]
                     }
                 ],
