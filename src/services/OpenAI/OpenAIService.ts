@@ -123,13 +123,9 @@ export class OpenAIService {
         } = {}
     ): Promise<string> {
         try {
-            let imageBuffer: Buffer;
-            if (typeof input === 'string') {
-                imageBuffer = fs.readFileSync(input);
-            } else {
-                imageBuffer = input;
-            }
-            const base64Image = imageBuffer.toString('base64');
+            const imageUrl = typeof input === 'string' 
+                ? input
+                : `data:image/jpeg;base64,${input.toString('base64')}`;
 
             const response = await this.openai.chat.completions.create({
                 model: options.model || OpenAIModel.GPT4O,
@@ -138,7 +134,7 @@ export class OpenAIService {
                         role: 'user',
                         content: [
                             { type: 'text', text: options.prompt || 'What\'s in this image?' },
-                            { type: 'image_url', image_url: { url: `data:image/jpeg;base64,${base64Image}` } }
+                            { type: 'image_url', image_url: { url: imageUrl } }
                         ]
                     }
                 ],
