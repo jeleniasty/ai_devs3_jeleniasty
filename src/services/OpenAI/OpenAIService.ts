@@ -102,7 +102,7 @@ export class OpenAIService {
     }
 
     async analyzeImage(
-        input: Buffer | string,
+        input: Buffer | string | (Buffer | string)[],
         options: {
             model?: OpenAIModel;
             maxTokens?: number;
@@ -111,21 +111,33 @@ export class OpenAIService {
         } = {}
     ): Promise<string> {
         try {
-            const imageInput = typeof input === 'string' 
-                ? input
-                : `data:image/jpeg;base64,${input.toString('base64')}`;
+            const images = Array.isArray(input) ? input : [input];
+            const messages = [
+                {
+                    role: 'user',
+                    content: options.prompt || 'What\'s in these images?'
+                }
+            ];
+
+            for (const img of images) {
+                const imageUrl = typeof img === 'string' 
+                    ? img 
+                    : `data:image/jpeg;base64,${img.toString('base64')}`;
+                
+                messages.push({
+                    role: 'user',
+                    content: [
+                        { 
+                            type: 'image_url',
+                            image_url: { url: imageUrl }
+                        }
+                    ] as any
+                });
+            }
 
             const response = await this.openai.chat.completions.create({
                 model: options.model || OpenAIModel.GPT4O,
-                messages: [
-                    {
-                        role: 'user',
-                        content: [
-                            { type: 'text', text: options.prompt || 'What\'s in this image?' },
-                            { type: 'image_url', image_url: { url: imageInput } }
-                        ]
-                    }
-                ],
+                messages: messages as any,
                 max_tokens: options.maxTokens,
                 temperature: options.temperature
             });
