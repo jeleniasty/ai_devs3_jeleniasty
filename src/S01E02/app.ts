@@ -4,7 +4,7 @@ import { OpenAIRoles } from "../services/OpenAI/OpenAIRoles";
 import axios from 'axios';
 import { CONFIG } from '../config';
 
-const MEMORY_URL = CONFIG.MEMORY_URL;
+const MEMORY_URL = CONFIG.MEMORY_DATA_URL;
 const VERIFY_URL = CONFIG.VERIFY_URL;
 
 interface Message {

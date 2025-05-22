@@ -46,7 +46,7 @@ async function downloadAndExtractZip() {
 
         const response = await axios({
             method: 'GET',
-            url: CONFIG.DATA_URL,
+            url: CONFIG.INTERROGATION_DATA_URL,
             responseType: 'arraybuffer'
         });
 

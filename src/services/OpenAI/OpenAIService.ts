@@ -148,6 +148,36 @@ export class OpenAIService {
         }
     }
 
+    async generateImage(
+        prompt: string,
+        options: {
+            model?: OpenAIModel;
+            size?: '256x256' | '512x512' | '1024x1024' | '1024x1792' | '1792x1024';
+            quality?: 'standard' | 'hd';
+            style?: 'vivid' | 'natural';
+            n?: number;
+        } = {}
+    ): Promise<string[]> {
+        try {
+            const response = await this.openai.images.generate({
+                prompt,
+                model: options.model,
+                n: options.n,
+                size: options.size,
+                quality: options.quality,
+                style: options.style,
+            });
+
+            if (!response.data) {
+                throw new Error('No image data received from OpenAI');
+            }
+
+            return response.data.map(img => img.url || '');
+        } catch (error) {
+            this.handleOpenAIError(error, 'image generation');
+        }
+    }
+
     private handleOpenAIError(error: unknown, context: string): never {
         if (error instanceof OpenAI.APIError) {
             throw new Error(`OpenAI API Error: ${error.message}`);
