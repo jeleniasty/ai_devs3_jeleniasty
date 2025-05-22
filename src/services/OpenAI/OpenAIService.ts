@@ -161,7 +161,7 @@ export class OpenAIService {
         try {
             const response = await this.openai.images.generate({
                 prompt,
-                model: options.model,
+                model: options.model || OpenAIModel.DALL_E_3,
                 n: options.n,
                 size: options.size,
                 quality: options.quality,
