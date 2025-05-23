@@ -7,7 +7,6 @@ import { OpenAIRoles } from '../services/OpenAI/OpenAIRoles';
 import { ResourceService } from '../services/ResourceService';
 
 const CURRENT_DIR = path.join(process.cwd(), 'src', 'S02E01');
-const EXTRACT_DIR = path.join(CURRENT_DIR, 'extracted');
 const REPORT_URL = CONFIG.REPORT_URL;
 
 const transcribeSystemPrompt = `You are a police officer transcribing an interrogation. 
@@ -34,16 +33,16 @@ Follow these steps in your analysis:
 const openai = new OpenAIService();
 const resourceService = new ResourceService(CURRENT_DIR);
 
-async function transcribeFiles(): Promise<string> {
+async function transcribeFiles(directory: string): Promise<string> {
     let transcriptedFiles = '';
     let counter = 1;
 
-    const files = fs.readdirSync(EXTRACT_DIR);
+    const files = fs.readdirSync(directory);
     console.log('Files to process:', files);
 
     for (const file of files) {
         console.log(`Processing file ${counter}: ${file}`);
-        const filePath = path.join(EXTRACT_DIR, file);
+        const filePath = path.join(directory, file);
         
         try {
             const fileContent = fs.readFileSync(filePath, 'utf-8');
@@ -62,8 +61,8 @@ async function transcribeFiles(): Promise<string> {
 }
 
 async function main() {
-    await resourceService.downloadAndExtractZip(CONFIG.INTERROGATION_DATA_URL, 'przesluchania.zip');
-    const transcribedFiles = await transcribeFiles();
+    const extractedDirectory = await resourceService.downloadAndExtractZip(CONFIG.INTERROGATION_DATA_URL, 'przesluchania.zip');
+    const transcribedFiles = await transcribeFiles(extractedDirectory);
     console.log(transcribedFiles);
 
     const answer = await openai.getCompletion([{role: OpenAIRoles.SYSTEM, content: textSystemPrompt}, {role: OpenAIRoles.USER, content: transcribedFiles}]);

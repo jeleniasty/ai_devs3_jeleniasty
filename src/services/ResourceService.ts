@@ -12,15 +12,16 @@ export class ResourceService {
         this.tempDir = path.join(currentDir, 'temp');
     }
 
-    async downloadAndExtractZip(url: string, zipFileName: string): Promise<void> {
+    async downloadAndExtractZip(url: string, zipFileName: string): Promise<string> {
         try {
             if (fs.existsSync(this.extractDir) && fs.readdirSync(this.extractDir).length > 0) {
                 console.log('Files already extracted, skipping download and extraction');
-                return;
+                return this.extractDir;
             }
 
             if (!fs.existsSync(this.tempDir)) {
                 fs.mkdirSync(this.tempDir);
+
             }
 
             const response = await axios({
@@ -43,9 +44,21 @@ export class ResourceService {
             fs.rmSync(this.tempDir, { recursive: true, force: true });
 
             console.log('Files extracted successfully');
+
+            return this.extractDir;
         } catch (error) {
             console.error('Error downloading or extracting zip:', error);
             throw error;
         }
+    }
+
+    async getFilesWithExtensions(extensions: string[], directory: string): Promise<string[]> {
+        const files = fs.readdirSync(directory);
+        return files
+            .filter(file => {
+                const ext = path.extname(file).toLowerCase();
+                return extensions.includes(ext);
+            })
+            .map(file => path.join(directory, file));
     }
 }
