@@ -2,11 +2,12 @@ import { CONFIG } from '../config';
 import axios from 'axios';
 import * as fs from 'fs';
 import * as path from 'path';
-import AdmZip from 'adm-zip';
 import { OpenAIService } from '../services/OpenAI/OpenAIService';
 import { OpenAIRoles } from '../services/OpenAI/OpenAIRoles';
+import { ResourceService } from '../services/ResourceService';
 
-const EXTRACT_DIR = path.join(process.cwd(), 'src', 'S02E01', 'extracted');
+const CURRENT_DIR = path.join(process.cwd(), 'src', 'S02E01');
+const EXTRACT_DIR = path.join(CURRENT_DIR, 'extracted');
 const REPORT_URL = CONFIG.REPORT_URL;
 
 const transcribeSystemPrompt = `You are a police officer transcribing an interrogation. 
@@ -31,44 +32,7 @@ Follow these steps in your analysis:
 }`;
 
 const openai = new OpenAIService();
-
-async function downloadAndExtractZip() {
-    try {
-        if (fs.existsSync(EXTRACT_DIR) && fs.readdirSync(EXTRACT_DIR).length > 0) {
-            console.log('Files already extracted, skipping download and extraction');
-            return;
-        }
-
-        const tempDir = path.join(process.cwd(), 'src', 'S02E01', 'temp');
-        if (!fs.existsSync(tempDir)) {
-            fs.mkdirSync(tempDir);
-        }
-
-        const response = await axios({
-            method: 'GET',
-            url: CONFIG.INTERROGATION_DATA_URL,
-            responseType: 'arraybuffer'
-        });
-
-        const zipPath = path.join(tempDir, 'przesluchania.zip');
-        fs.writeFileSync(zipPath, response.data);
-
-        const zip = new AdmZip(zipPath);
-        
-        if (!fs.existsSync(EXTRACT_DIR)) {
-            fs.mkdirSync(EXTRACT_DIR);
-        }
-
-        zip.extractAllTo(EXTRACT_DIR, true);
-
-        fs.rmSync(tempDir, { recursive: true, force: true });
-
-        console.log('Files extracted successfully');
-    } catch (error) {
-        console.error('Error downloading or extracting zip:', error);
-    }
-}
-
+const resourceService = new ResourceService(CURRENT_DIR);
 
 async function transcribeFiles(): Promise<string> {
     let transcriptedFiles = '';
@@ -82,24 +46,23 @@ async function transcribeFiles(): Promise<string> {
         const filePath = path.join(EXTRACT_DIR, file);
         
         try {
-            const transcription = await openai.transcribeAudio(filePath, {
-                language: 'pl',
-                prompt: transcribeSystemPrompt
-            });
-            
-            transcriptedFiles += `Witness ${counter}:\n ${transcription}\n`;
+            const fileContent = fs.readFileSync(filePath, 'utf-8');
+            const transcription = await openai.getCompletion([
+                { role: 'system', content: transcribeSystemPrompt },
+                { role: 'user', content: fileContent }
+            ]);
+            transcriptedFiles += `\n\nTranscription of ${file}:\n${transcription}`;
             counter++;
         } catch (error) {
-            console.error(`Error transcribing ${file}:`, error);
+            console.error(`Error processing file ${file}:`, error);
         }
     }
 
     return transcriptedFiles;
 }
 
-
-async function main(){
-    await downloadAndExtractZip();
+async function main() {
+    await resourceService.downloadAndExtractZip(CONFIG.INTERROGATION_DATA_URL, 'przesluchania.zip');
     const transcribedFiles = await transcribeFiles();
     console.log(transcribedFiles);
 
@@ -123,4 +86,4 @@ async function main(){
     }
 }
 
-main();
+main().catch(console.error);
