@@ -31,3 +31,4 @@ src/config.ts
 # Ignore all extracted folders
 src/**/extracted/
 src/**/temp/ 
+src/**/output

@@ -14,7 +14,7 @@
     "2.3": "node dist/S02E03/app.js",
     "2.4": "node dist/S02E04/app.js",
     "2.5": "node dist/S02E05/app.js",
-    "3.1": "noce dist/S03E01/app.js",
+    "3.1": "node dist/S03E01/app.js",
     "build": "tsc",
     "start": "node dist/index.js",
     "dev": "tsc -w",
