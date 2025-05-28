@@ -29,7 +29,13 @@ Zasady:
 9. Zwróć szczególną uwagę na osoby, miejsca, zawody osób i ich specjalne umiejętności wymienione w tekście.
 10. Weź pod uwagę nazwy plików. Mogą one zawierać wartościowe informacje.
 11. KAŻDY analizowany plik MUSI mieć wygenerowane słowa kluczowe. Nie pomijaj żadnego pliku.
-12. Jeśli tekst jest krótki lub pozornie mało informacyjny, postaraj się wyciągnąć z niego jak najwięcej istotnych słów kluczowych.`
+12. Jeśli tekst jest krótki lub pozornie mało informacyjny, postaraj się wyciągnąć z niego jak najwięcej istotnych słów kluczowych.
+13. Konkretność: Staraj się, aby słowa kluczowe były jak najbardziej specyficzne dla danego raportu i powiązanych faktów.
+14. Nazwiska i imiona: Uwzględnij je jako słowa kluczowe, jeśli są istotne dla kontekstu (np. "Adam Gospodarczyk", "Barbara Zawadzka")
+15. BARDZO WAŻNE są zawody wspomnianych w tekście osób. Koniecznie dodaj je do słów kluczowych.
+
+Przykład:
+- Jeśli raport wspomina o "dzikiej faunie", "zwierzynie leśnej" lub "wildlife", system walidujący prawdopodobnie oczekuje ogólniejszego słowa kluczowego, np. "zwierzęta".`
 
 const comparisonPrompt = `Przeanalizuj metadane raportu i listę dostępnych faktów. Wybierz najlepiej pasujący fakt do raportu na podstawie słów kluczowych i kontekstu.
 
@@ -38,6 +44,7 @@ WAŻNE:
 2. Jeśli nie ma idealnego dopasowania, wybierz fakt, który ma najwięcej wspólnych elementów z raportem.
 3. Nawet jeśli dopasowanie nie jest idealne, zawsze wybierz najlepszy dostępny fakt.
 4. Jeden fakt może być przypisany do wielu raportów - wybieraj najlepsze dopasowanie niezależnie od wcześniejszych przypisań.
+5. ZAWSZE najpierw próbuj połączyć fakty do danego raportu za pomocą osób które w nich występują - jeśli w raporcie jest mowa o konkretnej osobie, wybierz fakt który jest bezpośrednio z nią związany.
 
 Odpowiedz wyłącznie nazwą pliku wybranego faktu (np. "f01.txt").`
 
@@ -155,6 +162,8 @@ async function main() {
     await generateMetadata(reportFiles, reportsFilename);
 
     const reportMatches = await compareKeywordsAndGenerateReport();
+
+    console.table(reportMatches);
 
     if (reportMatches) {
         const answer = {
