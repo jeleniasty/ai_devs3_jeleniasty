@@ -37,6 +37,7 @@ WAŻNE:
 1. KAŻDY raport MUSI mieć przypisany fakt - nie pomijaj żadnego raportu!
 2. Jeśli nie ma idealnego dopasowania, wybierz fakt, który ma najwięcej wspólnych elementów z raportem.
 3. Nawet jeśli dopasowanie nie jest idealne, zawsze wybierz najlepszy dostępny fakt.
+4. Jeden fakt może być przypisany do wielu raportów - wybieraj najlepsze dopasowanie niezależnie od wcześniejszych przypisań.
 
 Odpowiedz wyłącznie nazwą pliku wybranego faktu (np. "f01.txt").`
 
@@ -109,23 +110,14 @@ async function compareKeywordsAndGenerateReport() {
     const factsMetadata: FactMetadata[] = JSON.parse(fs.readFileSync(factsPath, 'utf-8'));
     const reportsMetadata: FactMetadata[] = JSON.parse(fs.readFileSync(reportsPath, 'utf-8'));
     const reportMatches: ReportMatches = {};
-    const usedFacts = new Set<string>();
 
     for (const report of reportsMetadata) {
-        const availableFacts = factsMetadata
-            .filter((fact: FactMetadata) => !usedFacts.has(fact.filename));
-
-        if (availableFacts.length === 0) {
-            console.log(`No available facts for report ${report.filename}`);
-            continue;
-        }
-
         const prompt = `Raport:
 Nazwa pliku: ${report.filename}
 Słowa kluczowe: ${report.keywords}
 
 Dostępne fakty:
-${availableFacts.map((fact: FactMetadata) => 
+${factsMetadata.map((fact: FactMetadata) => 
     `Nazwa pliku: ${fact.filename}
 Słowa kluczowe: ${fact.keywords}
 ---`
@@ -144,7 +136,6 @@ Słowa kluczowe: ${fact.keywords}
                 factFilename: selectedFact.filename,
                 combinedKeywords: [...new Set([...report.keywords.split(','), ...selectedFact.keywords.split(',')])]
             };
-            usedFacts.add(selectedFact.filename);
         }
     }
 
