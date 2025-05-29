@@ -178,6 +178,28 @@ export class OpenAIService {
         }
     }
 
+    async generateEmbedding(
+        input: string,
+        options: {
+            model?: OpenAIModel;
+            encodingFormat?: 'float' | 'base64';
+            user?: string;
+        } = {}
+    ): Promise<number[]> {
+        try {
+            const response = await this.openai.embeddings.create({
+                model: options.model || OpenAIModel.TEXT_EMBEDDING_3_LARGE,
+                input: input,
+                user: options.user,
+                encoding_format: options.encodingFormat
+            });
+
+            return response.data[0].embedding;
+        } catch (error) {
+            this.handleOpenAIError(error, 'embedding generation');
+        }
+    }
+
     private handleOpenAIError(error: unknown, context: string): never {
         if (error instanceof OpenAI.APIError) {
             throw new Error(`OpenAI API Error: ${error.message}`);
