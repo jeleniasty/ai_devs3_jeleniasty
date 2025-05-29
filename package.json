@@ -29,10 +29,14 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "@qdrant/js-client-rest": "^1.14.1",
     "@types/adm-zip": "^0.5.7",
+    "@types/turndown": "^5.0.5",
     "adm-zip": "^0.5.16",
     "axios": "^1.9.0",
+    "cheerio": "^1.0.0",
     "dotenv": "^16.5.0",
-    "openai": "^4.98.0"
+    "openai": "^4.98.0",
+    "turndown": "^7.2.0"
   }
 }

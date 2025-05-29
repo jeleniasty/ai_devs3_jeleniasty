@@ -1,4 +1,6 @@
 import { QdrantClient } from '@qdrant/js-client-rest';
+import * as path from 'path';
+import * as fs from 'fs/promises';
 
 export class QdrantService {
     private client: QdrantClient;
@@ -18,7 +20,14 @@ export class QdrantService {
             throw new Error('QDRANT_URL is not defined in environment variables or config');
         }
 
-        this.client = new QdrantClient({ url, apiKey });
+        this.client = new QdrantClient({ 
+            url, 
+            apiKey,
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        });
         this.generateEmbedding = config.generateEmbedding;
     }
 
@@ -31,13 +40,18 @@ export class QdrantService {
         } = {}
     ): Promise<void> {
         try {
-            await this.client.createCollection(collectionName, {
-                vectors: {
-                    size: vectorSize,
-                    distance: options.distance || 'Cosine'
-                },
-                on_disk_payload: options.onDiskPayload
-            });
+            const collections = await this.client.getCollections();
+            const exists = collections.collections.some(c => c.name === collectionName);
+            
+            if (!exists) {
+                await this.client.createCollection(collectionName, {
+                    vectors: {
+                        size: vectorSize,
+                        distance: options.distance || 'Cosine'
+                    },
+                    on_disk_payload: options.onDiskPayload
+                });
+            }
         } catch (error) {
             this.handleQdrantError(error, 'collection creation');
         }
@@ -63,7 +77,11 @@ export class QdrantService {
                 })
             );
 
+            const pointsFilePath = path.join(__dirname, 'points.json');
+            await fs.writeFile(pointsFilePath, JSON.stringify(pointsWithVectors, null, 2));
+
             await this.client.upsert(collectionName, {
+                wait: true,
                 points: pointsWithVectors
             });
         } catch (error) {
