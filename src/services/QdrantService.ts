@@ -5,8 +5,8 @@ export class QdrantService {
     private generateEmbedding: (text: string) => Promise<number[]>;
 
     constructor(
-        config: { 
-            url?: string; 
+        config: {
+            url?: string;
             apiKey?: string;
             generateEmbedding: (text: string) => Promise<number[]>;
         }
@@ -73,22 +73,18 @@ export class QdrantService {
 
     async search(
         collectionName: string,
-        text: string,
+        query: string,
         options: {
             limit?: number;
             scoreThreshold?: number;
             filter?: Record<string, any>;
-        } = {}
-    ): Promise<{
-        id: string | number;
-        score: number;
-        payload?: Record<string, any> | null;
-    }[]> {
+        } = {}) {
         try {
-            const vector = await this.generateEmbedding(text);
+            const queryEmbedding = await this.generateEmbedding(query);
             return await this.client.search(collectionName, {
-                vector,
-                limit: options.limit || 10,
+                vector: queryEmbedding,
+                limit: options.limit || 5,
+                with_payload: true,
                 score_threshold: options.scoreThreshold,
                 filter: options.filter
             });
