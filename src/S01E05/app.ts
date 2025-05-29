@@ -1,6 +1,6 @@
 import axios from "axios";
-import { OpenAIService } from "../services/OpenAI/OpenAIService";
-import { OpenAIModel } from "../services/OpenAI/OpenAIModel";
+import { OpenAIService } from "../services/OpenAIService";
+import { OpenAIModel } from "../enums/OpenAIModel";
 import { CONFIG } from '../config';
 
 const DATA_URL = CONFIG.CENZURA_DATA_URL;

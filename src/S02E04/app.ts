@@ -1,10 +1,10 @@
 import { CONFIG } from '../config';
 import { ResourceService } from '../services/ResourceService';
 import * as path from 'path';
-import { OpenAIService } from '../services/OpenAI/OpenAIService';
+import { OpenAIService } from '../services/OpenAIService';
 import * as fs from 'fs/promises';
-import { OpenAIRoles } from '../services/OpenAI/OpenAIRoles';
-import { OpenAIModel } from '../services/OpenAI/OpenAIModel';
+import { OpenAIRoles } from '../enums/OpenAIRoles';
+import { OpenAIModel } from '../enums/OpenAIModel';
 import axios from 'axios';
 
 const CURRENT_DIR = path.join(process.cwd(), 'src', 'S02E04');

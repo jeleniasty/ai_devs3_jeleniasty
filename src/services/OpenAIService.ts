@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import OpenAI, { toFile } from 'openai';
-import { OpenAIModel } from './OpenAIModel';
+import { OpenAIModel } from '../enums/OpenAIModel';
 import fs from 'fs';
 import path from 'path';
 

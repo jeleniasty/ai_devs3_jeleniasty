@@ -1,7 +1,7 @@
 import path from 'path';
 import fs from 'fs';
-import { OpenAIService } from '../services/OpenAI/OpenAIService';
-import { OpenAIModel } from '../services/OpenAI/OpenAIModel';
+import { OpenAIService } from '../services/OpenAIService';
+import { OpenAIModel } from '../enums/OpenAIModel';
 
 const systemPrompt = `
 [City Identification from Map Parts]

@@ -1,6 +1,6 @@
-import { OpenAIService } from "../services/OpenAI/OpenAIService";
-import { OpenAIModel } from "../services/OpenAI/OpenAIModel";
-import { OpenAIRoles } from "../services/OpenAI/OpenAIRoles";
+import { OpenAIService } from "../services/OpenAIService";
+import { OpenAIModel } from "../enums/OpenAIModel";
+import { OpenAIRoles } from "../enums/OpenAIRoles";
 import axios from 'axios';
 import { CONFIG } from '../config';
 

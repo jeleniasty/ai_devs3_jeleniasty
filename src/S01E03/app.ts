@@ -1,5 +1,5 @@
-import { OpenAIService } from '../services/OpenAI/OpenAIService';
-import { OpenAIModel } from '../services/OpenAI/OpenAIModel';
+import { OpenAIService } from '../services/OpenAIService';
+import { OpenAIModel } from '../enums/OpenAIModel';
 import axios from 'axios';
 import dotenv from 'dotenv';
 import { CONFIG } from '../config';

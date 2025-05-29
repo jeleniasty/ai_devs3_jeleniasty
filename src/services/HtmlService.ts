@@ -1,6 +1,6 @@
 import * as cheerio from 'cheerio';
 import TurndownService from 'turndown';
-import { OpenAIService } from './OpenAI/OpenAIService';
+import { OpenAIService } from './OpenAIService';
 import axios from 'axios';
 import { URL } from 'url';
 

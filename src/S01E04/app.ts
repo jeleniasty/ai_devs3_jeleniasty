@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { OpenAIService } from '../services/OpenAI/OpenAIService';
-import { OpenAIModel } from '../services/OpenAI/OpenAIModel';
+import { OpenAIService } from '../services/OpenAIService';
+import { OpenAIModel } from '../enums/OpenAIModel';
 
 async function main() {
     const prompts = fs.readFileSync(path.join(process.cwd(), 'src', 'S01E04', 'prompts.md'), 'utf-8');

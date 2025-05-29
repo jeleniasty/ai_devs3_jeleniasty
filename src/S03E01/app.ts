@@ -3,8 +3,8 @@ import { CONFIG } from '../config';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as crypto from 'crypto';
-import { OpenAIRoles } from '../services/OpenAI/OpenAIRoles';
-import { OpenAIService } from '../services/OpenAI/OpenAIService';
+import { OpenAIRoles } from '../enums/OpenAIRoles';
+import { OpenAIService } from '../services/OpenAIService';
 import axios from 'axios';
 
 const CURRENT_DIR = path.join(process.cwd(), 'src', 'S03E01');

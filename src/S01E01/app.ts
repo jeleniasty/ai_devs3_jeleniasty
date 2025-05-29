@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { OpenAIService } from '../services/OpenAI/OpenAIService';
+import { OpenAIService } from '../services/OpenAIService';
 import { CONFIG } from '../config';
 
 const URL = CONFIG.BASE_URL;

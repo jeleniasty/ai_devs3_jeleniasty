@@ -1,10 +1,10 @@
 import { CONFIG } from '../config';
 import axios from 'axios';
-import { OpenAIService } from '../services/OpenAI/OpenAIService';
+import { OpenAIService } from '../services/OpenAIService';
 import { HtmlService } from '../services/HtmlService';
 import fs from 'fs/promises';
 import path from 'path';
-import { OpenAIRoles } from '../services/OpenAI/OpenAIRoles';
+import { OpenAIRoles } from '../enums/OpenAIRoles';
 
 const outputPath = path.join(process.cwd(), 'src', 'S02E05', 'article.md');
 
