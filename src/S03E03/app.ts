@@ -71,6 +71,15 @@ async function main() {
     const dbResult = await queryDb(sqlQuery);
     const formattedResult = dbResult.map(item => parseInt(item.dc_id));
     console.log(formattedResult);
+
+    const answer = {
+        task: 'database',
+        apikey: process.env.C3NTRALA_KEY,
+        answer: formattedResult
+    };
+
+    const response = await axios.post(CONFIG.REPORT_URL, answer);
+    console.log('Report response:', response.data.message);
 }
 
 main().catch(console.log);
