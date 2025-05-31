@@ -5,6 +5,7 @@ import { OpenAIService } from '../services/OpenAIService'
 import { OpenAIRoles } from '../enums/OpenAIRoles'
 import * as fs from 'fs'
 import * as path from 'path'
+import { Neo4jService } from '../services/Neo4jService'
 
 dotenv.config()
 
@@ -105,8 +106,7 @@ async function fetchAndStoreData() {
 
 async function main() {
     const { users, connections } = await fetchAndStoreData();
-
-
+    const neo4j = new Neo4jService();
 }
 
 main();
