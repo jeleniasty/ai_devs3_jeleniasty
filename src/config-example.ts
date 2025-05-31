@@ -1,4 +1,9 @@
 export const CONFIG = {
+    // S03E04 URLs
+    PEOPLE_URL: 'https://example.com/people',
+    PLACES_URL: 'https://example.com/places',
+    NOTES_URL: 'https://example.com/dane/barbara.txt',
+
     // S03E03 URLs
     DB_API_URL: 'https://example.com/apidb',
 
