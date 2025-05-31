@@ -47,8 +47,7 @@ async function queryDb(query: string): Promise<any[]> {
 async function fetchAndStoreData() {
     try {
         const targetDir = path.join(process.cwd(), 'src', 'S03E05', 'extracted');
-        
-        // Create extracted directory if it doesn't exist
+
         if (!fs.existsSync(targetDir)) {
             fs.mkdirSync(targetDir, { recursive: true });
         }
@@ -105,18 +104,9 @@ async function fetchAndStoreData() {
 }
 
 async function main() {
-    try {
-        const { users, connections } = await fetchAndStoreData();
-        
-        // Log some sample data
-        console.log('\nSample users:');
-        console.log(users.slice(0, 5));
-        
-        console.log('\nSample connections:');
-        console.log(connections.slice(0, 5));
-    } catch (error) {
-        console.error('Error in main:', error);
-    }
+    const { users, connections } = await fetchAndStoreData();
+
+
 }
 
 main();
