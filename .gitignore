@@ -26,7 +26,7 @@ Thumbs.db
 
 # Project specific
 src/S02E02/images/
-src/config.ts 
+src/config.ts
 
 # Ignore all data folders
 src/**/extracted/
