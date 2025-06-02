@@ -18,6 +18,11 @@ const datacentersTable = "datacenters";
 const usersTable = "users";
 
 const openai = new OpenAIService();
+const neo4j = new Neo4jService({
+    url: 'bolt://localhost:7687',
+    username: 'neo4j',
+    password: 'password123'
+});
 
 interface User {
     id: number;
@@ -104,9 +109,77 @@ async function fetchAndStoreData() {
     }
 }
 
+async function createNeo4jGraph(users: User[], connections: Connection[]): Promise<void> {
+    try {
+        for (const user of users) {
+            await neo4j.createNode('User', {
+                user_id: user.id,
+                username: user.username,
+                access_level: user.access_level,
+                is_active: user.is_active,
+                lastlog: user.lastlog
+            });
+        }
+        console.log('Created user nodes');
+
+        for (const connection of connections) {
+            await neo4j.createOneWayRelationship(
+                'User',
+                { user_id: connection.user1_id },
+                'CONNECTS_TO',
+                'User',
+                { user_id: connection.user2_id }
+            );
+        }
+        console.log('Created user connections');
+    } catch (error) {
+        console.error('Error creating Neo4j graph:', error);
+        throw error;
+    }
+}
+
+async function findShortestPath(): Promise<string> {
+    try {
+        const results = await neo4j.query(`
+            MATCH (a:User {username: 'Rafał'}), (b:User {username: 'Barbara'})
+            MATCH p = shortestPath((a)-[:CONNECTS_TO*]->(b))
+            WITH [node in nodes(p) | node.username] as usernames
+            RETURN reduce(s = '', x IN usernames | s + CASE WHEN s = '' THEN x ELSE ',' + x END) as path
+        `);
+
+        if (results.length === 0) {
+            throw new Error('No path found between Rafał and Barbara');
+        }
+
+        return results[0].path;
+    } catch (error) {
+        console.error('Error finding shortest path:', error);
+        throw error;
+    }
+}
+
 async function main() {
-    const { users, connections } = await fetchAndStoreData();
-    const neo4j = new Neo4jService();
+    let path: string;
+    try {
+        const { users, connections } = await fetchAndStoreData();
+        await createNeo4jGraph(users, connections);
+        path = await findShortestPath();
+        console.log(path);
+
+        const answer = {
+            task: 'connections',
+            apikey: process.env.C3NTRALA_KEY,
+            answer: path
+        };
+
+        const response = await axios.post(CONFIG.REPORT_URL, answer);
+        console.log('Report response:', response.data.message);
+    } catch (error) {
+        console.error('Error in main:', error);
+        throw error;
+    } finally {
+        await neo4j.close();
+    }
 }
 
 main();

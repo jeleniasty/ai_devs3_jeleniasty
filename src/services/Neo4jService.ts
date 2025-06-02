@@ -59,20 +59,61 @@ export class Neo4jService {
     ): Promise<void> {
         const session: Session = this.driver.session();
         try {
+            const fromPropertyEntries = Object.entries(fromProperties)
+                .map(([key, value]) => `${key}: $from${key}`)
+                .join(', ');
+            const toPropertyEntries = Object.entries(toProperties)
+                .map(([key, value]) => `${key}: $to${key}`)
+                .join(', ');
+
             const query = `
-                MATCH (from:${fromLabel} $fromProperties)
-                MATCH (to:${toLabel} $toProperties)
+                MATCH (from:${fromLabel} {${fromPropertyEntries}})
+                MATCH (to:${toLabel} {${toPropertyEntries}})
                 CREATE (from)-[r:${relationshipType}]->(to)
             `;
             
+            const params: Record<string, any> = {};
+            Object.entries(fromProperties).forEach(([key, value]) => {
+                params[`from${key}`] = value;
+            });
+            Object.entries(toProperties).forEach(([key, value]) => {
+                params[`to${key}`] = value;
+            });
+            
             await session.executeWrite(tx =>
-                tx.run(query, {
-                    fromProperties,
-                    toProperties
-                })
+                tx.run(query, params)
             );
         } catch (error) {
             this.handleError(error, 'create one-way relationship');
+        } finally {
+            await session.close();
+        }
+    }
+
+    async query<T = any>(
+        query: string,
+        params: { [key: string]: any } = {}
+    ): Promise<T[]> {
+        const session: Session = this.driver.session();
+        try {
+            const result = await session.executeRead(tx => 
+                tx.run(query, params)
+            );
+            
+            return result.records.map(record => {
+                const obj: { [key: string]: any } = {};
+                record.keys.forEach(key => {
+                    const value = record.get(key);
+                    const keyStr = key.toString();
+                    obj[keyStr] = neo4j.isNode(value) ? value.properties :
+                                neo4j.isRelationship(value) ? value.properties :
+                                neo4j.isPath(value) ? value :
+                                value;
+                });
+                return obj as T;
+            });
+        } catch (error) {
+            this.handleError(error, 'execute query');
         } finally {
             await session.close();
         }
