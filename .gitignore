@@ -32,3 +32,4 @@ src/config.ts
 src/**/extracted/
 src/**/temp/ 
 src/**/output
+src/**/images
