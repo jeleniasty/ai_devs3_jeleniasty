@@ -15,9 +15,9 @@ export class CentralaService {
         this.apiKey = apiKey;
     }
 
-    async callReport(answer: string) {
+    async callReport(task: string, answer: string) {
         const body = {
-            task: "photos",
+            task: task,
             apikey: this.apiKey,
             answer: answer
         }
