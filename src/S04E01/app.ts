@@ -105,7 +105,6 @@ async function analyzeFinalImages(): Promise<string> {
         return '';
     }
     
-    // Analyze all images at once
     console.log('Filenames to openai' + filenames);
     const analysis = await openai.analyzeImage(imageBuffers, { prompt: WOMAN_DESCRIPTION_PROMPT });
     const descriptions = analysis.trim().split('\n').filter(desc => desc.trim());
