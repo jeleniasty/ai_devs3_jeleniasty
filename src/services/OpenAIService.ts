@@ -200,6 +200,35 @@ export class OpenAIService {
         }
     }
 
+    async fineTune(fileDir: string): Promise<string> {
+        try {
+            const fileStream = fs.createReadStream(fileDir);
+
+            const uploadedFile = await this.openai.files.create({
+                file: fileStream as any,
+                purpose: "fine-tune"
+            });
+
+            if (!uploadedFile || !uploadedFile.id) {
+                throw new Error('File upload failed');
+            }
+
+            const fineTuneJob = await this.openai.fineTuning.jobs.create({
+                training_file: uploadedFile.id,
+                model: OpenAIModel.GPT4O_MINI
+            });
+
+            if (!fineTuneJob || !fineTuneJob.id) {
+                throw new Error('Fine-tune job creation failed');
+            }
+
+            return fineTuneJob.id;
+        } catch (error) {
+            this.handleOpenAIError(error, 'fine-tuning');
+        }
+    }
+    
+
     private handleOpenAIError(error: unknown, context: string): never {
         if (error instanceof OpenAI.APIError) {
             throw new Error(`OpenAI API Error: ${error.message}`);
