@@ -215,7 +215,7 @@ export class OpenAIService {
 
             const fineTuneJob = await this.openai.fineTuning.jobs.create({
                 training_file: uploadedFile.id,
-                model: OpenAIModel.GPT4O_MINI
+                model: OpenAIModel.GPT4O_MINI_2024_07_18
             });
 
             if (!fineTuneJob || !fineTuneJob.id) {
@@ -225,6 +225,15 @@ export class OpenAIService {
             return fineTuneJob.id;
         } catch (error) {
             this.handleOpenAIError(error, 'fine-tuning');
+        }
+    }
+
+    async checkFineTuneStatus(jobId: string): Promise<any> {
+        try {
+            const job = await this.openai.fineTuning.jobs.retrieve(jobId);
+            return job;
+        } catch (error) {
+            this.handleOpenAIError(error, 'check fine-tune status');
         }
     }
     
