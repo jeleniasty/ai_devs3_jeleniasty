@@ -1,4 +1,14 @@
 export const CONFIG = {
+
+    //S04E03 URLs
+    WEB_PAGE_URL: 'https://example.com',
+    get PAGE_QUESTIONS_URL() {
+        return `https://example.com/data/${process.env.C3NTRALA_KEY}/softo.json`;
+    },
+
+    //S04E02 URLs
+    LAB_DATA_URL: 'https://c3ntrala.ag3nts.org/dane/lab_data.zip',
+
     // S03E04 URLs
     PEOPLE_URL: 'https://example.com/people',
     PLACES_URL: 'https://example.com/places',
