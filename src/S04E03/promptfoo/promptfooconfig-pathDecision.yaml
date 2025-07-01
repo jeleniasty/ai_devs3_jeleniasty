@@ -1,0 +1,7 @@
+prompts: file://../prompts/pathDecisionPrompt.md
+
+providers:
+  - openai:gpt-4.1-mini
+
+tests: file://tests/pathDecisionPrompt-test.yaml
+#promptfoo eval --config ./src/S04E03/promptfoo/promptfooconfig-pathDecision.yaml --env-path .env
