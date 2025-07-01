@@ -1,0 +1,187 @@
+- vars:
+    question: What is the company's phone number?
+    content: |
+      # Welcome to Our Company
+
+      ## Quick Facts
+      - Founded: 1999
+      - Employees: 500+
+      - Contact: 
+        - Phone: +1 555 123 4567
+        - Email: hello@company.com
+
+      ## More Info
+      Visit our website for more details.
+  assert:
+    - type: equals
+      value: +1 555 123 4567
+- vars:
+    question: What is the support email?
+    content: |
+      # Support Contacts
+
+      | Department | Contact Person | Email                  |
+      |------------|---------------|------------------------|
+      | Sales      | John Doe      | sales@company.com      |
+      | Support    | Jane Smith    | <support@company.com>  |
+      | Billing    | Bill Pay      | billing@company.com    |
+
+      For urgent issues, call our hotline.
+  assert:
+    - type: equals
+      value: support@company.com
+- vars:
+    question: What is the company's address?
+    content: |
+      # About Us
+
+      Our headquarters are located at:
+
+      789 Business Rd. Suite 400 Metropolis, NY 10001
+
+      ## Contact
+      Phone: +1 800 555 0000
+  assert:
+    - type: equals
+      value: 789 Business Rd. Suite 400 Metropolis, NY 10001
+- vars:
+    question: What is the company's phone number?
+    content: |
+      # Contact Directory
+
+      - Main Office: +1 111 222 3333
+      - Customer Service: +1 444 555 6666
+      - Technical Support: +1 777 888 9999
+
+      Please call the appropriate department.
+  assert:
+    - type: equals
+      value: NO_DATA
+- vars:
+    question: What is the company's customer service phone number?
+    content: |
+      # Contact Directory
+
+      - Main Office: +1 111 222 3333
+      - Customer Service: +1 444 555 6666
+      - Technical Support: +1 777 888 9999
+
+      Please call the appropriate department.
+  assert:
+    - type: equals
+      value: +1 444 555 6666
+- vars:
+    question: What is the CEO's name?
+    content: |
+      # Leadership
+
+      Our CEO, Dr. Emily Carter, has led the company since 2010. Under her guidance, we have grown rapidly.
+
+      ## Board of Directors
+      - John Smith
+      - Lisa Wong
+  assert:
+    - type: equals
+      value: Dr. Emily Carter
+- vars:
+    question: What is the company's VAT number?
+    content: |
+      # Legal Information
+
+      Please find our registration details below:
+
+      - Company Name: Example Corp
+      - VAT Number: EU123456789
+      - Registration Number: 987654321
+
+      ## Contact
+      Email: legal@example.com
+  assert:
+    - type: equals
+      value: EU123456789
+- vars:
+    question: What is the name of the HR manager?
+    content: |
+      # Team Directory
+
+      | Name         | Department | Role           |
+      |--------------|------------|----------------|
+      | Alice Brown  | HR         | HR Manager     |
+      | Bob White    | IT         | Lead Developer |
+      | Carol Black  | Finance    | CFO            |
+
+      For more information, contact the HR department.
+  assert:
+    - type: equals
+      value: Alice Brown
+- vars:
+    question: Which technology solution powered the Apollo project?
+    content: |
+      # Company Overview
+
+      Welcome to TechNova Inc., a leader in logistics and automation. Our mission is to innovate and deliver world-class solutions for global supply chains.
+
+      ## News
+      - 2020: Launched the Hermes Project for real-time tracking.
+      - 2019: Opened new R&D center in Berlin.
+      - 2018: Received the Global Innovation Award.
+
+      ## Major Initiatives
+      - **Apollo Project** (2018-2020)
+        - Objective: Automate logistics
+        - Technology Used: SkyNet AI
+        - Outcome: Reduced delivery times by 30%
+        - Partners: RoboFleet, DataStream
+      - **Hermes Project** (2021-2022)
+        - Objective: Real-time tracking
+        - Technology Used: TrackMaster
+        - Outcome: Improved customer satisfaction
+      - **Orion Project** (2020-2021)
+        - Focus: Warehouse robotics
+        - Technology: RoboArm
+
+      ## Careers
+      We are hiring for roles in AI research, logistics, and customer support. Visit our careers page for more info.
+
+      ## Contact
+      For more information, email projects@company.com or call +1 800 555 1234.
+  assert:
+    - type: equals
+      value: SkyNet AI
+- vars:
+    question: Identify the core platform utilized in the GreenLeaf sustainability project.
+    content: |
+      # Sustainability Initiatives
+
+      At GreenFuture Corp, we believe in a sustainable tomorrow. Our projects span energy, water, and waste management.
+
+      ## Awards
+      - National Green Award (2022)
+      - EcoTech Prize (2021)
+
+      ## Ongoing Projects
+      - BlueWater Project
+        - Year: 2021
+        - Technology: AquaTrack
+        - Focus: Water usage monitoring
+        - Partners: WaterSafe, HydroLogic
+      - GreenLeaf Project
+        - Year: 2022
+        - Partners: EcoFuture, GreenTech
+        - Description: Smart energy management for office buildings.
+        - Core Technology: EcoSense Platform
+        - Achievements:
+          - Reduced energy consumption by 25%
+          - Received the National Green Award
+      - WasteZero Initiative
+        - Year: 2020
+        - Focus: Waste reduction in urban areas
+        - Technology: RecycleBot
+
+      ## Community
+      We run educational workshops and sponsor local green startups.
+
+      For details, visit our sustainability page or contact us at info@greenfuture.com.
+  assert:
+    - type: equals
+      value: EcoSense Platform

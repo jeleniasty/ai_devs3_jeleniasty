@@ -33,11 +33,18 @@ async function answerQuestion(pageContent: string, question: string): Promise<st
 }
 
 
-async function getPagePaths(pageContent: string): Promise<string[]> {
-    return openai.getCompletion([
+async function getPagePaths(pageContent: string): Promise<Record<string, string>> {
+    const result = await openai.getCompletion([
         {role: OpenAIRoles.SYSTEM, content: pathsFindingPrompt },
         {role: OpenAIRoles.USER, content: `Page Content (HTML):\n${pageContent}`}
     ], {model: OpenAIModel.GPT41_MINI});
+
+    // Try to parse the result as JSON, fallback to empty object if parsing fails
+    try {
+        return typeof result === 'string' ? JSON.parse(result) : result;
+    } catch {
+        return {};
+    }
 }
 
 async function choosePath(pageContent: string, question: string): Promise<string> {
@@ -56,8 +63,6 @@ async function findAnswer(question: string) {
 async function main() {
     const questions = await getQuestions();
     console.log(questions);
-
-    
 
     for (const [key, question] of Object.entries(questions)[1]) {
         const answer = await findAnswer(question);

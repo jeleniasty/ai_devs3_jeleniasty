@@ -13,6 +13,14 @@ You are an assistant tasked with answering a specific question based on the cont
 
 - Do not speculate or guess beyond what the content explicitly states.
 
+---
+
+**Question:** 
+{{question}}
+
+**Content (Markdown):**
+{{content}}
+
 ## Examples
 
 ### Example 1
