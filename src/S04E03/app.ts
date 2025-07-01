@@ -19,20 +19,6 @@ const pathDecisionPrompt = readFileSync(require.resolve('./prompts/pathDecisionP
 const pathsFindingPrompt = readFileSync(require.resolve('./prompts/pathsFindingPrompt.md'), 'utf8');
 const answerPrompt = readFileSync(require.resolve('./prompts/answerPrompt.md'), 'utf8');
 
-const questionAnswerPrompt = `
-You are an AI language model that analyzes web page content provided in HTML format.
-Your task is to determine whether the answer to a specific question is contained within the page content.
-
-Instructions:
-- Thoroughly analyze the provided HTML content.
-- If the answer to the question is present, return a concise and precise response that directly answers the question.
-- If the answer is not present, ambiguous, incomplete, or inferred, respond with: NO_DATA
-- Be objective and avoid assumptions. ALWAYS use only the information explicitly stated in the provided HTML content.
-
-Output Format:
-- Respond with either the concise, factual answer (if found), or NO_DATA (if the answer is not explicitly present or cannot be determined with certainty).
-`;
-
 async function getQuestions(): Promise<{[key: string]: string}> {
     const url = CONFIG.PAGE_QUESTIONS_URL;
     const response = await axios.get(url);
@@ -41,7 +27,7 @@ async function getQuestions(): Promise<{[key: string]: string}> {
 
 async function answerQuestion(pageContent: string, question: string): Promise<string> {
     return openai.getCompletion([
-        {role: OpenAIRoles.SYSTEM, content: questionAnswerPrompt },
+        {role: OpenAIRoles.SYSTEM, content: answerPrompt },
         {role: OpenAIRoles.USER, content: `Question: ${question}\n\nPage Content (HTML):\n${pageContent}`}
     ], {model: OpenAIModel.GPT41_MINI});
 }
@@ -56,31 +42,15 @@ async function getPagePaths(pageContent: string): Promise<string[]> {
 
 async function choosePath(pageContent: string, question: string): Promise<string> {
     return openai.getCompletion([
-        {role: OpenAIRoles.SYSTEM, content: linkSelectionPrompt },
+        {role: OpenAIRoles.SYSTEM, content: pathDecisionPrompt },
         {role: OpenAIRoles.USER, content: `Question: ${question}\n\nPage Content (HTML):\n${pageContent}`}
     ], {model: OpenAIModel.GPT41_MINI});
 }
 
 async function findAnswer(question: string) {
     const page = (await axios.get(CONFIG.WEB_PAGE_URL)).data;
-    let currentIteration = 0;
-    let currentPage = page;
-    let currentPath;
 
-    console.log('Q:'+question);
-    let answer = await answerQuestion(page, question);
-    console.log('Answer nr ' + currentIteration + ': ' + answer);
-
-    while(currentIteration < 10 && answer === 'NO_DATA') {
-        currentIteration++;
-        currentPath = await choosePath(currentPage, question);
-        console.log('Current path:' + currentPath);
-        currentPage = (await axios.get(CONFIG.WEB_PAGE_URL + currentPath)).data;
-        answer = await answerQuestion(currentPage, question);
-        console.log('Answer nr ' + currentIteration + ': ' + answer);
-    }
-    console.log('Final answer: ' + answer);
-    return answer;
+    return 'null';
 }
 
 async function main() {
