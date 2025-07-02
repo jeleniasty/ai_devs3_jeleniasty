@@ -1,0 +1,111 @@
+- vars:
+    name: Basic example
+    content: |
+      <a href="/" class="hidden" title="Strona główna">Start</a>
+      <a href="/portfolio" title="Opisy naszych ostatnich realizacji dla klientów" style="display:none">Portfolio</a>
+      <a href="/wsparcie" title="Wsparcie klienta i zgłaszanie problemów" class="hidden">Support</a>
+      <a href="/kontakt" title="Zadzwoń do nas, wyślij maila lub odwiedź nas osobiście">Kontakt</a>
+      <a href="/uslugi" title="Zakres usług">Co oferujemy?</a>
+      <!-- <a href="/blog" title="Najnowsze artykuły">Blog</a> -->
+  assert:
+    - type: is-json
+    - type: javascript
+      value: |
+        const count = (str, substr) => (str.match(new RegExp(substr, 'g')) || []).length;
+        console.log(output);
+        return count(output, '/uslugi') === 1 && count(output, '/kontakt') === 1 && count(output, '/portfolio') === 0 && count(output, '/wsparcie') === 0 && count(output, '/blog') === 0;
+- vars:
+    name: Duplicated links with different title and text
+    content: |
+      <a href="/portfolio" title="Opisy naszych ostatnich realizacji dla klientów">Portfolio</a>
+      <a href="/" class="hidden" title="Strona główna">Start</a>
+      <a href="/portfolio" title="Nasze realizacje" style="display:none">Realizacje</a>
+      <a href="/portfolio" title="Nasze portfolio" style="display:none">Portfolio</a>
+      <a href="/wsparcie" title="Wsparcie klienta i zgłaszanie problemów" class="hidden">Support</a>
+      <a href="/kontakt" title="Zadzwoń do nas, wyślij maila lub odwiedź nas osobiście">Kontakt</a>
+      <a href="/uslugi" title="Zakres usług">Co oferujemy?</a>
+      <!-- <a href="/blog" title="Najnowsze artykuły">Blog</a> -->
+      <a href="/portfolio">Referencje</a>
+  assert:
+    - type: is-json
+    - type: javascript
+      value: |
+        const count = (str, substr) => (str.match(new RegExp(substr, 'g')) || []).length;
+        return count(output, '/uslugi') === 1 && count(output, '/kontakt') === 1 && count(output, '/portfolio') === 1 && count(output, '/blog') === 0 && count(output, '/wsparcie') === 0; 
+- vars:
+    name: Hidden and visible mix
+    content: |
+      <a href="/about" title="O nas">O nas</a>
+      <a href="/hidden" style="display:none">Ukryty</a>
+      <a href="/contact" class="hidden">Kontakt</a>
+      <a href="/services">Usługi</a>
+      <!-- <a href="/archive">Archiwum</a> -->
+    assert:
+      - type: is-json
+      - type: javascript
+        value: |
+          const count = (str, substr) => (str.match(new RegExp(substr, 'g')) || []).length;
+          return count(output, '/about') === 1 && count(output, '/services') === 1 && count(output, '/hidden') === 0 && count(output, '/contact') === 0 && count(output, '/archive') === 0;
+- vars:
+    name: Absolute and relative URLs
+    content: |
+      <a href="https://example.com/faq">FAQ</a>
+      <a href="/help">Help</a>
+      <a href="http://example.com/support">Support</a>
+      <a href="/contact">Contact</a>
+      <a href="mailto:info@example.com">Email</a>
+    assert:
+      - type: is-json
+      - type: javascript
+        value: |
+          const count = (str, substr) => (str.match(new RegExp(substr, 'g')) || []).length;
+          return count(output, '/faq') === 1 && count(output, '/help') === 1 && count(output, '/support') === 1 && count(output, '/contact') === 1 && count(output, 'mailto:info@example.com') === 0;
+- vars:
+    name: Large realistic web page
+    content: |
+      <!DOCTYPE html>
+      <html lang="pl">
+      <head>
+        <meta charset="UTF-8">
+        <title>Moja Firma</title>
+      </head>
+      <body>
+        <header>
+          <nav>
+            <a href="/" title="Strona główna">Home</a>
+            <a href="/uslugi" title="Nasze usługi">Usługi</a>
+            <a href="/o-nas" title="Poznaj nasz zespół">O nas</a>
+            <a href="/kontakt" title="Skontaktuj się z nami">Kontakt</a>
+            <a href="/blog" title="Najnowsze artykuły">Blog</a>
+            <a href="/panel" style="display:none">Panel klienta</a>
+            <a href="/admin" class="hidden">Admin</a>
+          </nav>
+        </header>
+        <main>
+          <section>
+            <h1>Witamy w naszej firmie!</h1>
+            <p>Oferujemy szeroki zakres usług dla klientów indywidualnych i biznesowych.</p>
+            <a href="/oferta" title="Szczegóły oferty">Zobacz ofertę</a>
+            <a href="/promocje">Aktualne promocje</a>
+          </section>
+          <section>
+            <h2>Ostatnie wpisy na blogu</h2>
+            <ul>
+              <li><a href="/blog/jak-wybrac-usluge">Jak wybrać usługę?</a></li>
+              <li><a href="/blog/nowosci">Nowości w ofercie</a></li>
+            </ul>
+          </section>
+        </main>
+        <footer>
+          <a href="/regulamin">Regulamin</a>
+          <a href="/polityka-prywatnosci">Polityka prywatności</a>
+          <a href="mailto:info@mojafirma.pl">Email</a>
+        </footer>
+      </body>
+      </html>
+  assert:
+    - type: is-json
+    - type: javascript
+      value: |
+        const count = (str, substr) => (str.match(new RegExp(substr, 'g')) || []).length;
+        return count(output, '/') === 1 && count(output, '/uslugi') === 1 && count(output, '/o-nas') === 1 && count(output, '/kontakt') === 1 && count(output, '/blog') === 1 && count(output, '/oferta') === 1 && count(output, '/promocje') === 1 && count(output, '/blog/jak-wybrac-usluge') === 1 && count(output, '/blog/nowosci') === 1 && count(output, '/regulamin') === 1 && count(output, '/polityka-prywatnosci') === 1 && count(output, '/panel') === 0 && count(output, '/admin') === 0 && count(output, 'mailto:info@mojafirma.pl') === 0;

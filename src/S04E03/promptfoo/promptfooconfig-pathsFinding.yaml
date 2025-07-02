@@ -1,0 +1,7 @@
+prompts: file://../prompts/pathsFindingPrompt.md
+
+providers:
+  - openai:gpt-4.1-mini
+
+tests: file://tests/pathsFindingPrompt-test.yaml
+#promptfoo eval --config ./src/S04E03/promptfoo/promptfooconfig-pathsFinding.yaml --env-path .env

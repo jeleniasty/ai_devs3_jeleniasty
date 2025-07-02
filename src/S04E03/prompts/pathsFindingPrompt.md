@@ -52,3 +52,8 @@ Return a map (object/dictionary) where:
 
 
 > **Ensure high accuracy and strictly follow all rules. Avoid guessing — only include visible, meaningful links.**
+
+---
+
+**Web Page Content (HTML):**
+{{content}}
