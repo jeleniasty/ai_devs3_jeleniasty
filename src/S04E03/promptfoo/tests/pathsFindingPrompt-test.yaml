@@ -109,3 +109,32 @@
       value: |
         const count = (str, substr) => (str.match(new RegExp(substr, 'g')) || []).length;
         return count(output, '/') === 1 && count(output, '/uslugi') === 1 && count(output, '/o-nas') === 1 && count(output, '/kontakt') === 1 && count(output, '/blog') === 1 && count(output, '/oferta') === 1 && count(output, '/promocje') === 1 && count(output, '/blog/jak-wybrac-usluge') === 1 && count(output, '/blog/nowosci') === 1 && count(output, '/regulamin') === 1 && count(output, '/polityka-prywatnosci') === 1 && count(output, '/panel') === 0 && count(output, '/admin') === 0 && count(output, 'mailto:info@mojafirma.pl') === 0;
+- vars:
+    name: Link hidden in paragraph text (not visible as navigation)
+    content: |
+      <html>
+        <body>
+          <nav>
+            <a href="/home">Strona główna</a>
+            <a href="/about">O nas</a>
+          </nav>
+          <main>
+            <p>
+              Blockchain to zdecentralizowana, rozproszona baza danych, w której informacje są gromadzone w „blokach” powiązanych ze sobą za pomocą kryptograficznych funkcji skrótu (hash). Każdy nowy blok zawiera odniesienie do <a href="/loop" title="totalnie losowa podstrona">poprzedniego</a> – tworząc trwały, niemodyfikowalny łańcuch danych.
+            </p>
+          </main>
+          <footer>
+            <a href="/contact">Kontakt</a>
+          </footer>
+        </body>
+      </html>
+  assert:
+    - type: is-json
+    - type: javascript
+      value: |
+        const count = (str, substr) => (str.match(new RegExp(substr, 'g')) || []).length;
+        return count(output, '/home') === 1 &&
+          count(output, '/about') === 1 &&
+          count(output, '/contact') === 1 &&
+          count(output, '/loop') === 0;
+
