@@ -1,0 +1,7 @@
+prompts: file://../systemPrompt.txt
+
+providers:
+  - openai:gpt-4.1-mini
+
+tests: file://systemPrompt-test.yaml
+#promptfoo eval --config ./src/S04E04/promptfoo/promptfooconfig.yaml --env-path .env

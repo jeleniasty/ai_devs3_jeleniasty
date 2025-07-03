@@ -1,5 +1,8 @@
+import { OpenAIModel } from '../enums/OpenAIModel';
 import { OpenAIRoles } from '../enums/OpenAIRoles';
 import { OpenAIService } from '../services/OpenAIService';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 
 export class DroneInstructionService {
 
@@ -14,18 +17,17 @@ export class DroneInstructionService {
   }
 
   private async askOpenAIForDescription(instruction: string): Promise<string> {
-    const systemPrompt = 'Jesteś asystentem opisującym miejsca na podstawie instrukcji.';
+    const promptPath = join(process.cwd(), 'src', 'S04E04', 'systemPrompt.txt');
+    const prompt = readFileSync(promptPath, 'utf-8').replace('{{instruction}}', instruction);
 
     try {
       const description = await this.openai.getCompletion<string>([
-        { role: OpenAIRoles.SYSTEM, content: systemPrompt },
-        { role: OpenAIRoles.USER, content: instruction }
-      ]);
+        { role: OpenAIRoles.USER, content: prompt }
+      ], {model: OpenAIModel.GPT41_MINI});
 
       return description;
     } catch (error) {
       console.error('OpenAI completion error:', error);
-      
       return 'Unable to generate description.';
     }
   }

@@ -1,0 +1,80 @@
+- vars:
+    instruction: "zostałem w miejscu"
+  assert:
+    - type: equals
+      value: znacznik startu
+- vars:
+    instruction: "jedno pole w prawo"
+  assert:
+    - type: equals
+      value: trawa
+- vars:
+    instruction: "dwa pola w prawo"
+  assert:
+    - type: equals
+      value: drzewo
+- vars:
+    instruction: "trzy pola w prawo"
+  assert:
+    - type: equals
+      value: dom
+- vars:
+    instruction: "jedno pole w dół"
+  assert:
+    - type: equals
+      value: trawa
+- vars:
+    instruction: "jedno pole w prawo i jedno w dół"
+  assert:
+    - type: equals
+      value: wiatrak
+- vars:
+    instruction: "dwa pola w prawo i jedno w dół"
+  assert:
+    - type: equals
+      value: trawa
+- vars:
+    instruction: "trzy pola w prawo i jedno w dół"
+  assert:
+    - type: equals
+      value: trawa
+- vars:
+    instruction: "dwa pola w dół"
+  assert:
+    - type: equals
+      value: trawa
+- vars:
+    instruction: "jedno pole w prawo i dwa w dół"
+  assert:
+    - type: equals
+      value: trawa
+- vars:
+    instruction: "dwa pola w prawo i dwa w dół"
+  assert:
+    - type: equals
+      value: skały
+- vars:
+    instruction: "trzy pola w prawo i dwa w dół"
+  assert:
+    - type: equals
+      value: dwa drzewa
+- vars:
+    instruction: "trzy pola w dół"
+  assert:
+    - type: equals
+      value: góry
+- vars:
+    instruction: "jedno pole w prawo i trzy w dół"
+  assert:
+    - type: equals
+      value: góry
+- vars:
+    instruction: "dwa pola w prawo i trzy w dół"
+  assert:
+    - type: equals
+      value: samochód
+- vars:
+    instruction: "trzy pola w prawo i trzy w dół"
+  assert:
+    - type: equals
+      value: jaskinia 
