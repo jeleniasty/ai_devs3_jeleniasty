@@ -25,7 +25,12 @@ export class DroneInstructionService {
         { role: OpenAIRoles.USER, content: prompt }
       ], {model: OpenAIModel.GPT41_MINI});
 
-      return description;
+      try {
+        const parsed = JSON.parse(description);
+        return parsed.description;
+      } catch (e) {
+        throw new Error('Invalid JSON returned from OpenAI: ' + description);
+      }
     } catch (error) {
       console.error('OpenAI completion error:', error);
       return 'Unable to generate description.';
