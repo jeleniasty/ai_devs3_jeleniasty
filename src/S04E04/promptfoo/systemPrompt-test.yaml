@@ -1,80 +1,132 @@
 - vars:
     instruction: "zostałem w miejscu"
   assert:
-    - type: equals
-      value: znacznik startu
+    - type: is-json
+    - type: contains
+      value: '"description": "znacznik startu"'
 - vars:
     instruction: "jedno pole w prawo"
   assert:
-    - type: equals
-      value: trawa
+    - type: is-json
+    - type: contains
+      value: '"description": "trawa"'
 - vars:
     instruction: "dwa pola w prawo"
   assert:
-    - type: equals
-      value: drzewo
+    - type: is-json
+    - type: contains
+      value: '"description": "drzewo"'
 - vars:
     instruction: "trzy pola w prawo"
   assert:
-    - type: equals
-      value: dom
+    - type: is-json
+    - type: contains
+      value: '"description": "dom"'
 - vars:
     instruction: "jedno pole w dół"
   assert:
-    - type: equals
-      value: trawa
+    - type: is-json
+    - type: contains
+      value: '"description": "trawa"'
 - vars:
     instruction: "jedno pole w prawo i jedno w dół"
   assert:
-    - type: equals
-      value: wiatrak
+    - type: is-json
+    - type: contains
+      value: '"description": "wiatrak"'
 - vars:
     instruction: "dwa pola w prawo i jedno w dół"
   assert:
-    - type: equals
-      value: trawa
+    - type: is-json
+    - type: contains
+      value: '"description": "trawa"'
 - vars:
     instruction: "trzy pola w prawo i jedno w dół"
   assert:
-    - type: equals
-      value: trawa
+    - type: is-json
+    - type: contains
+      value: '"description": "trawa"'
 - vars:
     instruction: "dwa pola w dół"
   assert:
-    - type: equals
-      value: trawa
+    - type: is-json
+    - type: contains
+      value: '"description": "trawa"'
 - vars:
     instruction: "jedno pole w prawo i dwa w dół"
   assert:
-    - type: equals
-      value: trawa
+    - type: is-json
+    - type: contains
+      value: '"description": "trawa"'
 - vars:
     instruction: "dwa pola w prawo i dwa w dół"
   assert:
-    - type: equals
-      value: skały
+    - type: is-json
+    - type: contains
+      value: '"description": "skały"'
 - vars:
     instruction: "trzy pola w prawo i dwa w dół"
   assert:
-    - type: equals
-      value: dwa drzewa
+    - type: is-json
+    - type: contains
+      value: '"description": "dwa drzewa"'
 - vars:
     instruction: "trzy pola w dół"
   assert:
-    - type: equals
-      value: góry
+    - type: is-json
+    - type: contains
+      value: '"description": "góry"'
 - vars:
     instruction: "jedno pole w prawo i trzy w dół"
   assert:
-    - type: equals
-      value: góry
+    - type: is-json
+    - type: contains
+      value: '"description": "góry"'
 - vars:
     instruction: "dwa pola w prawo i trzy w dół"
   assert:
-    - type: equals
-      value: samochód
+    - type: is-json
+    - type: contains
+      value: '"description": "samochód"'
 - vars:
     instruction: "trzy pola w prawo i trzy w dół"
   assert:
-    - type: equals
-      value: jaskinia 
+    - type: is-json
+    - type: contains
+      value: '"description": "jaskinia"' 
+- vars:
+    instruction: "no dobra mordziaty, leciałem full w prawo, a później na całego w dół"
+  assert:
+    - type: is-json
+    - type: contains
+      value: '"description": "jaskinia"' 
+- vars:
+    instruction: "strasznie dzisiaj wiało, więc poleciałem tylko jeden kafelek w prawo"
+  assert:
+    - type: is-json
+    - type: contains
+      value: '"description": "trawa"'
+- vars:
+    instruction: "poszłuchaj mnie uważnie. Najpierw poleciałem jedno pole w prawo i na maksa w dół. Potem zorientowałem się, że źle poleciałem, więc poleciałem jedno pole w prawo i na maksa w górę"
+  assert:
+    - type: is-json
+    - type: contains
+      value: '"description": "drzewo"' 
+- vars:
+    instruction: "eee... halo, słyszysz mnie? Uwaga podaje namiary: dajesz ile wlezie w dół, jedno w prawo, w górę i w lewo"
+  assert:
+    - type: is-json
+    - type: contains
+      value: '"description": "trawa"'
+- vars:
+    instruction: "dzisiaj miałem loty testowe, trochę się pobawiłem. Poleciałem do oporu w prawo, całkowicie na dół, na full w lewo i maksymalnie w górę"
+  assert:
+    - type: is-json
+    - type: contains
+      value: '"description": "znacznik startu"' 
+- vars:
+    instruction: "hej, podaje instrukcje: leciałem ..... halo coś przerywa .... ok .. a więc leciałem w prawo (odgłosy szumu) ... halo ? .. .. . wracam przez problemy z siecią w lewo"
+  assert:
+    - type: is-json
+    - type: contains
+      value: '"description": "znacznik startu"' 
