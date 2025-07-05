@@ -1,5 +1,11 @@
 export const CONFIG = {
 
+    //S04E04 URLs
+    NOTATNIK_RAFALA_URL: 'https://example.com/dane/notatnik-rafala.pdf',
+    get QUESTION_LIST_URL() {
+        return `https://example.com/data/${process.env.C3NTRALA_KEY}/notes.json`
+    },
+
     //S04E03 URLs
     WEB_PAGE_URL: 'https://example.com',
     get PAGE_QUESTIONS_URL() {
