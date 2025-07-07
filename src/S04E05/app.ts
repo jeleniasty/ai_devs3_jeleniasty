@@ -10,7 +10,7 @@ const openai = new OpenAIService();
 const centrala = new CentralaService();
 
 
-async function callApi(questions: Record<string, string>): Promise<{ status: string, message: string }> {
+async function callReport(questions: Record<string, string>): Promise<{ status: string, message: string }> {
     try {
         const response = await centrala.callReport('notes', questions);
         if (response && response.data && typeof response.data.message === 'string') {
@@ -35,7 +35,7 @@ async function main() {
     const questions = await axios.get(CONFIG.QUESTION_LIST_URL);
     console.log(questions.data);
 
-    const answer = callApi(questions.data);
+    const answer = callReport(questions.data);
 }
 
 main();
