@@ -21,7 +21,7 @@ export class PdfProcessor {
 
     async process(): Promise<string> {
         if (fs.existsSync(this.textPath)) {
-            return this.textPath;
+            return fs.readFileSync(this.textPath, 'utf8');
         }
 
         try {
@@ -33,8 +33,8 @@ export class PdfProcessor {
             
             const text = pdfText + '\n' + imageText;
 
-            fs.writeFileSync(text, this.textPath);
-            return this.textPath;
+            fs.writeFileSync(this.textPath, text);
+            return text;
         } catch (error) {
             console.error('Error processing PDF:', error);
             throw error;
